@@ -15,6 +15,8 @@ import { ChipIcon } from "@heroicons/react/solid";
 import supportImg from "../assets/support.jpg";
 
 function Home() {
+
+  console.log('Home:',localStorage.getItem('token'));
   const supportLinks = [
     {
       name: "Sales",

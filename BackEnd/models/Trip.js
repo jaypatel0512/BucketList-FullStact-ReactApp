@@ -26,6 +26,9 @@ const tripSchema =  Schema ({
     status:{
         type: Boolean,
     },
+    img:{
+        type: String,
+    },
 });
 
 module.exports = mongoose.model('Trip',tripSchema);

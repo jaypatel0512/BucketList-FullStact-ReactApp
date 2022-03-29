@@ -3,21 +3,22 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import decode from "jwt-decode";
 import cities from "../data/cities";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
+import {TextField,Stack, Autocomplete} from "@mui/material";
+
 
 function AddTrip() {
   const navigate = useNavigate();
 
+
+  const [city, setCity] = useState("");
   const [formData, setFormData] = useState({
     name: "",
-    city: "",
     description: "",
     startDate: "",
     endDate: "",
   });
 
-  const { name, city, description, startDate, endDate } = formData;
+  const { name, description, startDate, endDate } = formData;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -33,12 +34,19 @@ function AddTrip() {
         "x-auth-token": token,
       },
     };
+
+    const img =cities.filter(
+      (item => item.city.includes(city))).map((item => item.image)
+    );
+
+    
     let data = {
       name: name,
       city: city,
       description: description,
       startDate: startDate,
       endDate: endDate,
+      img:img[0],
     };
     console.log(data);
     try {
@@ -53,13 +61,18 @@ function AddTrip() {
       console.log(err.response);
     }
   };
+  
   return (
     <div className="p-20">
       <div className="mt-8 max-w-md mx-auto">
-        <div className="border-b-2">Add Trip</div>
-        <form onSubmit={(e) => onSubmit(e)}>
-          <label className="text-left">Name:</label>
-          <input
+      <div className="flex items-center mt-3 justify-center ">
+          <Link to="/trip" className="p-2 border-2 border-blue-300 hover:border-blue-500 rounded-lg">Check All Trips</Link>
+        </div>
+        <div className="p-2 border-b-2 border-gray-400 font-normal text-2xl">Add Trip</div>
+        
+        <form onSubmit={(e) => onSubmit(e)} className="p-4 grid grid-cols-2 gap-4">
+         
+          <TextField
             name="name"
             type="text"
             value={name}
@@ -81,28 +94,31 @@ function AddTrip() {
             }
           /> */}
 
-          <Autocomplete
-            id="combo-box-demo"
-            getOptionLabel={(cities) => `${cities.city}`}
-            options={cities}
-            sx={{ width: 300 }}
-            isOptionEqualToValue={}
-            noOptionsText={"no city available"}
-            renderInput={(params) => <TextField {...params} label="Select City" />}
-          />
+          <Stack>
+            <Autocomplete
+              options={cities.map((item => item.city))}
+              renderInput = {(params) => <TextField {...params} label='cities'/> }
+              value = {city}
+              onChange = {(event,newValue)=> setCity(newValue)}
+              freeSolo
+            />
+          </Stack>
 
-          <label>Description:</label>
-          <input
+          
+          <textarea
             name="description"
             type="text"
             value={description}
             onChange={(e) => handleChange(e)}
-            placeholder="desc"
+            placeholder="Add Description"
+            rows="3"
             className={
-              "w-full p-2 text-primary border rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4"
+              "w-full p-2 text-primary border rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4 col-span-2"
             }
-          />
+          >
+          </textarea>
 
+          <div className="col-span-2">
           <label>Start Date:</label>
           <input
             name="startDate"
@@ -114,34 +130,36 @@ function AddTrip() {
               "w-full p-2 text-primary border rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4"
             }
           />
+          </div>
+         
 
+          <div className="col-span-2">
           <label>End Date:</label>
           <input
             name="endDate"
             type="date"
             value={endDate}
             onChange={(e) => handleChange(e)}
-            placeholder="desc"
             className={
               "w-full p-2 text-primary border rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4"
             }
           />
+          </div>
+         
 
-          <div className="flex items-center mt-3 justify-center">
+          <div className="col-span-2 flex items-center mt-3 justify-center">
             <button
               className={
                 "bg-blue-700 hover:bg-blue-500 py-2 px-4 text-md text-white rounded border border-blue focus:outline-none focus:border-black"
               }
               type="submit"
-              value="Register"
+              
             >
-              Add Car
+              Add Trip
             </button>
           </div>
         </form>
-        <div className="flex items-center mt-3 justify-center">
-          <Link to="/trip">Check all Trips</Link>
-        </div>
+        
       </div>
     </div>
   );

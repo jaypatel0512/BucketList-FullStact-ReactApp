@@ -58,7 +58,8 @@ const CarCard = ({ bucket }) => {
                 <div className="pt-4 pl-2">
                     <div className="grid grid-cols-1 font-bold text-xl">
                         <details>
-                            <summary className="p-4">{status}</summary>
+                            <summary className="p-4">{status}
+                            </summary>
                             <div>{bucket.desc}</div>
                         </details>
                     </div>
